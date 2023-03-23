@@ -17,14 +17,22 @@
 package com.example.android.dagger
 
 import android.app.Application
+import com.example.android.dagger.di.AppComponent
+import com.example.android.dagger.di.DaggerAppComponent
 import com.example.android.dagger.storage.SharedPreferencesStorage
 import com.example.android.dagger.user.UserManager
 
 open class MyApplication : Application() {
 
-    open val userManager by lazy {
+    //SE INSTANCIA AQUI DAGGER PARA QUE SEA COMPORTIDO POR TODA LA APPLICACIÓN
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create( applicationContext )
+    }
+
+/*    open val userManager by lazy {
         UserManager(
             SharedPreferencesStorage(this)
         )
-    }
+    }*/
+
 }

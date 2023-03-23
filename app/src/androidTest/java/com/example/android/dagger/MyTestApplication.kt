@@ -24,4 +24,6 @@ class MyTestApplication : MyApplication() {
     override val userManager by lazy {
         UserManager(FakeStorage())
     }
+
+
 }

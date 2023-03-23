@@ -26,38 +26,45 @@ import com.example.android.dagger.R
 import com.example.android.dagger.login.LoginActivity
 import com.example.android.dagger.registration.RegistrationActivity
 import com.example.android.dagger.settings.SettingsActivity
+import com.example.android.dagger.user.UserManager
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mainViewModel: MainViewModel
+    @Inject lateinit var mainViewModel: MainViewModel
 
-    /**
-     * If the User is not registered, RegistrationActivity will be launched,
-     * If the User is not logged in, LoginActivity will be launched,
-     * else carry on with MainActivity
-     */
+    //@Inject lateinit var userManager: UserManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val userManager = (application as MyApplication).userManager
+        //val userManager = (application as MyApplication).userManager
 
-        if (!userManager.isUserLoggedIn()) {
+        val userManager = (application as MyApplication).appComponent.userManager()
+
+        //SI EL USUARIO NO HA INICIADO SESSIÓN
+        if ( !userManager.isUserLoggedIn() ) {
             //SI EL USUARIO NO ESTA REGISTRADO
-            if (!userManager.isUserRegistered()) {
+            if ( !userManager.isUserRegistered() ) {
+                //SE ENVIA A LA PÁGINA
                 startActivity(
                     Intent(this, RegistrationActivity::class.java)
                 )
+                //SE FINALIZA LA PAGINA ACTUAL
                 finish()
             } else {
+                //SE ENVIA A LA PÁGINA LOGIN
                 startActivity(Intent(this, LoginActivity::class.java))
+                //SE FINALIZA LA PAGINA ACTUAL
                 finish()
             }
         } else {
 
             setContentView(R.layout.activity_main)
 
-            mainViewModel = MainViewModel(userManager.userDataRepository!!)
+            userManager.userComponent!!.inject(this@MainActivity)
 
+            //SE CONFIGURAN LOS VIEW'S
             setupViews()
         }
     }
@@ -71,9 +78,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
+
         findViewById<TextView>(R.id.hello).text = mainViewModel.welcomeText
+
         findViewById<Button>(R.id.settings).setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+            startActivity(
+                Intent(
+                    this,
+                    SettingsActivity::class.java
+                )
+            )
         }
+
     }
 }

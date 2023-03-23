@@ -17,9 +17,11 @@
 package com.example.android.dagger.storage
 
 import android.content.Context
+import javax.inject.Inject
 
-class SharedPreferencesStorage(context: Context) : Storage {
+class SharedPreferencesStorage @Inject constructor (context: Context) : Storage {
 
+    //SE CREA EL ARCHIVO DE PREFERENCIAS
     private val sharedPreferences =
         context.getSharedPreferences("Dagger", Context.MODE_PRIVATE)
 
