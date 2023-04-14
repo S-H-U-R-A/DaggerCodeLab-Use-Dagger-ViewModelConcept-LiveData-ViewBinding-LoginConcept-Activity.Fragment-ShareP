@@ -7,23 +7,39 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import com.example.android.dagger.main.MainActivity
 import com.example.android.dagger.MyApplication
 import com.example.android.dagger.R
 import com.example.android.dagger.registration.RegistrationActivity
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    @Inject lateinit var loginViewModel: LoginViewModel
+    //MIENTRAS HACEMOS TODA LA MIGRACIÓN, COMO YA CONFIGURAMOS LOS
+    //MODULOS DE LOS SUBCOMPONENTES EN HILT, PODEMOS PROPORCIONARLOS
+    //A LAS CLASES QUE USAN ESTOS COMPONENTES CON @ENTRYPOINT
+    /*@InstallIn(SingletonComponent::class)
+    @EntryPoint
+    interface LoginEntryPoint{
+        fun loginComponet(): LoginComponent.Factory
+    }*/
+
+    //@Inject lateinit var loginViewModel: LoginViewModel
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var errorTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         // Creates ViewModel and listens for the loginState LiveData
 /*        loginViewModel = LoginViewModel(
@@ -31,9 +47,21 @@ class LoginActivity : AppCompatActivity() {
         )*/
 
         //SE VINCULA EL SUBCOMPONENTE DE DAGGER A ESTA ACTIVIDAD
-        (application as MyApplication)
+/*        (application as MyApplication)
             .appComponent.loginComponent()
-            .create().inject(this)
+            .create().inject(this)*/
+
+        //NUEVO CÓDIGO PARA ACCEDER AL LOGIN COMPONENT A PARTIR DE HILT
+        //MIENTRAS SE HACE LA MIGRACIÓN TOTAL
+/*        val entryPoint = EntryPointAccessors.fromApplication<LoginEntryPoint>(
+            applicationContext,
+            LoginEntryPoint::class.java
+        )
+        entryPoint.loginComponet().create().inject(this@LoginActivity)*/
+
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
 
         loginViewModel.loginState.observe(this, Observer<LoginViewState> { state ->
             when (state) {

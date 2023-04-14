@@ -20,27 +20,52 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.dagger.MyApplication
 import com.example.android.dagger.R
 import com.example.android.dagger.login.LoginActivity
 import com.example.android.dagger.registration.RegistrationActivity
 import com.example.android.dagger.settings.SettingsActivity
 import com.example.android.dagger.user.UserManager
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject lateinit var mainViewModel: MainViewModel
+    //NUEVO CÓDIGO HILT MIENTRAS SE HACE LA MIGRACIÓN
+    /*@InstallIn(SingletonComponent::class)
+    @EntryPoint
+    interface UserManagerEntryPoint{
+        fun userManager() : UserManager
+    }*/
+
+
+/*    @Inject
+    lateinit var mainViewModel: MainViewModel*/
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     //@Inject lateinit var userManager: UserManager
+
+    @Inject
+    lateinit var userManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //val userManager = (application as MyApplication).userManager
 
-        val userManager = (application as MyApplication).appComponent.userManager()
+        // val userManager = (application as MyApplication).appComponent.userManager()
+
+        //NUEVO CÓDIGO PARA ACCEDER AL USER COMPONENT A PARTIR DE HILT
+        //MIENTRAS SE HACE LA MIGRACIÓN TOTAL
+/*        val entryPoint = EntryPointAccessors.fromApplication(
+            applicationContext,
+            UserManagerEntryPoint::class.java
+        )
+        val userManager = entryPoint.userManager()*/
 
         //SI EL USUARIO NO HA INICIADO SESSIÓN
         if ( !userManager.isUserLoggedIn() ) {
@@ -62,7 +87,8 @@ class MainActivity : AppCompatActivity() {
 
             setContentView(R.layout.activity_main)
 
-            userManager.userComponent!!.inject(this@MainActivity)
+            //YA NO SE NECESITA, HILT PROPORCIONA ESTA DEPENDENCIA
+            //userManager.userComponent!!.inject(this@MainActivity)
 
             //SE CONFIGURAN LOS VIEW'S
             setupViews()

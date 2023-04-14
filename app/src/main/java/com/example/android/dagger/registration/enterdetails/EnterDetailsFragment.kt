@@ -10,39 +10,38 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.android.dagger.MyApplication
 import com.example.android.dagger.R
 import com.example.android.dagger.registration.RegistrationActivity
 import com.example.android.dagger.registration.RegistrationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class EnterDetailsFragment : Fragment() {
 
-    /**
-     * RegistrationViewModel is used to set the username and password information (attached to
-     * Activity's lifecycle and shared between different fragments)
-     * EnterDetailsViewModel is used to validate the user input (attached to this
-     * Fragment's lifecycle)
-     *
-     * They could get combined but for the sake of the codelab, we're separating them so we have
-     * different ViewModels with different lifecycles.
-     */
-    @Inject lateinit var registrationViewModel: RegistrationViewModel
-    @Inject lateinit var enterDetailsViewModel: EnterDetailsViewModel
+/*    @Inject
+    lateinit var registrationViewModel: RegistrationViewModel*/
+
+    private val registrationViewModel: RegistrationViewModel by activityViewModels()
+
+/*    @Inject
+    lateinit var enterDetailsViewModel: EnterDetailsViewModel*/
+
+    private val enterDetailsViewModel: EnterDetailsViewModel by activityViewModels()
 
     private lateinit var errorTextView: TextView
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
 
-    override fun onAttach(context: Context) {
+    /*override fun onAttach(context: Context) {
         super.onAttach(context)
         //LE DECIMOS A DAGGER QUE ESTE FRAGMENT REQUIERE DE INJECTION
         //(requireActivity().application as MyApplication).appComponent.inject(this)
 
         (requireActivity() as RegistrationActivity).registrationComponent.inject(this)
-
-
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,10 +53,9 @@ class EnterDetailsFragment : Fragment() {
             R.layout.fragment_enter_details, container, false
         )
 
-/*        registrationViewModel = (
-                    activity as RegistrationActivity
-                ).registrationViewModel*/
-
+        /*registrationViewModel = (
+                activity as RegistrationActivity
+        ).registrationViewModel*/
         //enterDetailsViewModel = EnterDetailsViewModel()
 
 

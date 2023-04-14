@@ -23,18 +23,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.android.dagger.MyApplication
 import com.example.android.dagger.R
 import com.example.android.dagger.registration.RegistrationActivity
 import com.example.android.dagger.registration.RegistrationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class TermsAndConditionsFragment : Fragment() {
 
-    @Inject
-    lateinit var registrationViewModel: RegistrationViewModel
+    /*@Inject
+    lateinit var registrationViewModel: RegistrationViewModel*/
 
-    override fun onAttach(context: Context) {
+    private val registrationViewModel: RegistrationViewModel by activityViewModels()
+
+
+   /*override fun onAttach(context: Context) {
         super.onAttach(context)
         //ANTES SI SE REGISTRARA EN EL COMPONENTE PRINCIPAL
         //(requireActivity().application as MyApplication).appComponent.inject(this)
@@ -42,7 +48,7 @@ class TermsAndConditionsFragment : Fragment() {
         //SE AÑADE AL SUB-COMPONET REGISTRATION
         (requireActivity() as RegistrationActivity).registrationComponent.inject(this)
 
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,

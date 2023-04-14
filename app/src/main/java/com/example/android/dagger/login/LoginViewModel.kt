@@ -18,15 +18,18 @@ package com.example.android.dagger.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android.dagger.di.ActivityScope
+import androidx.lifecycle.ViewModel
 import com.example.android.dagger.user.UserManager
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
 //NO LO ANOTAMOS CON EL @ACTIVITYSCOPE PORQUE COMO SOLO VA A SER
 //USADO POR LA ACTIVIDAD NO NECESITAMOS COMPARTIRLO MIENTRAS
 //ESTA ACTIVIDAD ESTE VIVA
-@ActivityScope
-class LoginViewModel @Inject constructor (private val userManager: UserManager) {
+@ActivityScoped
+class LoginViewModel @Inject constructor(
+    private val userManager: UserManager
+) : ViewModel() {
 
     private val _loginState = MutableLiveData<LoginViewState>()
     val loginState: LiveData<LoginViewState>

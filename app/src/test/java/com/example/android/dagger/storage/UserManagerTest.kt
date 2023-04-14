@@ -16,6 +16,7 @@
 
 package com.example.android.dagger.storage
 
+import com.example.android.dagger.user.UserDataRepository
 import com.example.android.dagger.user.UserManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -31,11 +32,12 @@ class UserManagerTest {
     @Before
     fun setup() {
         storage = FakeStorage()
-        userManager = UserManager(storage)
+        userManager = UserManager(storage, UserDataRepository())
     }
 
     @Test
     fun `Username returns what is in the storage`() {
+
         assertEquals("", userManager.username)
 
         userManager.registerUser("username", "password")
@@ -101,4 +103,5 @@ class UserManagerTest {
         assertFalse(userManager.isUserLoggedIn())
         assertFalse(userManager.isUserRegistered())
     }
+
 }

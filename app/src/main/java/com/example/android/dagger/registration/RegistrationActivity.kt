@@ -24,25 +24,46 @@ import com.example.android.dagger.R
 import com.example.android.dagger.main.MainActivity
 import com.example.android.dagger.registration.enterdetails.EnterDetailsFragment
 import com.example.android.dagger.registration.termsandconditions.TermsAndConditionsFragment
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegistrationActivity : AppCompatActivity() {
 
+    //MIENTRAS HACEMOS TODA LA MIGRACIÓN, COMO YA CONFIGURAMOS LOS
+    //MODULOS DE LOS SUBCOMPONENTES EN HILT, PODEMOS PROPORCIONARLOS
+    //A LAS CLASES QUE USAN ESTOS COMPONENTES CON @ENTRYPOINT
+    /*@InstallIn(SingletonComponent::class)
+    @EntryPoint
+    interface RegistrationEntryPoint{
+        fun registrationComponent(): RegistrationComponent.Factory
+    }*/
     @Inject
     lateinit var registrationViewModel: RegistrationViewModel
 
-    lateinit var registrationComponent: RegistrationComponent
+    //lateinit var registrationComponent: RegistrationComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //ANTES DE CUALQUIER COSA LE DECIMOS A DAGGER QUE INJECTE
         //DEPENDENCIAS MECESARIAS EN ESTA ACTIVIDAD,
         //OSEA LAS VARIABLES QUE TENGAN LA ANOTACIÓN @INJECT
-        registrationComponent = (application as MyApplication)
+        /*registrationComponent = (application as MyApplication)
             .appComponent.registrationComponent()
             .create()
+        registrationComponent.inject(this)*/
 
-        registrationComponent.inject(this)
+        //NUEVO CÓDIGO PARA ACCEDER AL REGISTRATION COMPONENT A PARTIR DE HILT
+        //MIENTRAS SE HACE LA MIGRACIÓN TOTAL
+/*        val entryPoint = EntryPointAccessors.fromApplication<RegistrationEntryPoint>(
+            applicationContext,
+            RegistrationEntryPoint::class.java
+        )
+        registrationComponent = entryPoint.registrationComponent().create()*/
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)

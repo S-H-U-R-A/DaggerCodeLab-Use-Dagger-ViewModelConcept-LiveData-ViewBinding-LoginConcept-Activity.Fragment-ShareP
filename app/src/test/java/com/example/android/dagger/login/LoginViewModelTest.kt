@@ -44,6 +44,7 @@ class LoginViewModelTest {
 
     @Test
     fun `Get username`() {
+
         whenever(userManager.username).thenReturn("Username")
 
         val username = viewModel.getUsername()
@@ -53,6 +54,7 @@ class LoginViewModelTest {
 
     @Test
     fun `Login emits success`() {
+
         whenever(userManager.loginUser(anyString(), anyString())).thenReturn(true)
 
         viewModel.login("username", "login")
